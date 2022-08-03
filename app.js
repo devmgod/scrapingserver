@@ -50,8 +50,6 @@ const datafetch = () => {
     const Movie = db_table.movies;
     const default_Url = "https://tamilgun.bio/video/";
 
-    const pageNum = 0;
-
     //database format
     Movie.destroy({
             where: {},
@@ -67,7 +65,7 @@ const datafetch = () => {
         });
 
     //directory format
-    const directory = "./poster/";
+    const directory = "../tamilmovies/poster/";
 
     fs.readdir(directory, (err, files) => {
         if (err) throw err;
@@ -86,7 +84,7 @@ const datafetch = () => {
 
             const movieData = Array.from(
                 document.getElementsByTagName("article")
-            ).map((e, index) => [
+            ).map((e) => [
                 e.getElementsByTagName("a")[0].href,
                 e.getElementsByTagName("img")[0].src,
                 e.getElementsByTagName("a")[2].title,
@@ -97,7 +95,7 @@ const datafetch = () => {
             //download image
             movieData.map((val, index) => {
                 const url = val[1];
-                const path = "./poster/" + (index + 1) + ".jpg";
+                const path = "../tamilmovies/public/poster/" + (index + 1) + ".jpg";
                 download(url, path, () => {
                     console.log("1 ✅ Done!");
                 });
@@ -117,14 +115,19 @@ const datafetch = () => {
                     })
                     .catch((err) => {
                         res.status(500).send({
-                            message: err.message ||
-                                "Some error occurred while creating the Movie.",
+                            message: err.message || "Some error occurred while creating the Movie.",
                         });
                     });
+
+                // const pp = document
+                //     .getElementsByTagName("nav")[0]
+                //     .getElementsByClassName("pages")[0]
+                //     .innerHTML.split(" ")[3];
             });
         });
 
-    for (let i = 2; i < pageNum; i++) {
+    for (let i = 2; i < 124; i++) {
+        // console.log("----------================", Number(pageNum));
         //node-fetch
         url_Num = default_Url + "page/" + i + "/";
         fetch(url_Num)
@@ -135,28 +138,28 @@ const datafetch = () => {
 
                 const movieData = Array.from(
                     document.getElementsByTagName("article")
-                ).map((e, index) => [
+                ).map((e) => [
                     e.getElementsByTagName("a")[0].href,
                     e.getElementsByTagName("img")[0].src,
                     e.getElementsByTagName("a")[2].title,
                     e.getElementsByTagName("a")[3].title,
                     e.getElementsByTagName("time")[0].innerHTML,
                 ]);
-                console.log("moviedata----------", movieData);
+                // console.log("moviedata----------", movieData);
 
                 //download image
                 movieData.map((val, index) => {
                     const url = val[1];
-                    const path = "./poster/" + i + "-" + (index + 1) + ".jpg";
+                    const path = "../tamilmovies/public/poster/" + i + "-" + (index + 1) + ".jpg";
                     download(url, path, () => {
                         console.log("✅ Done!");
                     });
                     // Create a Movie
                     const movie = {
                         poster: path,
-                        title: val[2],
+                        title: val[3],
                         year: val[4],
-                        quality: val[3],
+                        quality: val[2],
                         video: val[0],
                     };
 
@@ -200,5 +203,11 @@ app.use(function(err, req, res, next) {
     res.render("error");
 });
 
-module.exports = app;
+process.on("uncaughtException", (error, origin) => {
+    console.log("----- Uncaught exception -----");
+    console.log(error);
+    console.log("----- Exception origin -----");
+    console.log(origin);
+});
+
 module.exports = app;
