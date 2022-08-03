@@ -19,3 +19,8 @@ fetch('https://opensea.io/0xE1363434c88Fcc2939211995EBFacD6fF7f4CB39?search[sort
     .catch(function(err) {  
         console.log('Failed to fetch page: ', err);  
     });
+
+
+sequalize
+
+https://www.esparkinfo.com/blog/node-js-with-mysql-using-sequelize-express.html

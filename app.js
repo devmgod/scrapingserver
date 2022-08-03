@@ -52,17 +52,17 @@ const datafetch = () => {
 
     //database format
     Movie.destroy({
-            where: {},
-            truncate: false,
-        })
-        .then((nums) => {
-            res.send({ message: `${nums} Movies were deleted successfully!` });
-        })
-        .catch((err) => {
-            res.status(500).send({
-                message: err.message || "Some error occurred while removing all movies.",
-            });
-        });
+        where: {},
+        truncate: false,
+    });
+    // .then((nums) => {
+    //     res.send({ message: `${nums} Movies were deleted successfully!` });
+    // })
+    // .catch((err) => {
+    //     res.status(500).send({
+    //         message: err.message || "Some error occurred while removing all movies.",
+    //     });
+    // });
 
     //directory format
     const directory = "../tamilmovies/poster/";
@@ -102,22 +102,22 @@ const datafetch = () => {
                 // Create a Movie
                 const movie = {
                     poster: path,
-                    title: val[2],
+                    title: val[3],
                     year: val[4],
-                    quality: val[3],
+                    quality: val[2],
                     video: val[0],
                 };
 
                 // Save Movie in the database
-                Movie.create(movie)
-                    .then((data) => {
-                        res.send(data);
-                    })
-                    .catch((err) => {
-                        res.status(500).send({
-                            message: err.message || "Some error occurred while creating the Movie.",
-                        });
-                    });
+                Movie.create(movie);
+                // .then((data) => {
+                //     res.send(data);
+                // })
+                // .catch((err) => {
+                //     res.status(500).send({
+                //         message: err.message || "Some error occurred while creating the Movie.",
+                //     });
+                // });
 
                 // const pp = document
                 //     .getElementsByTagName("nav")[0]
@@ -164,16 +164,16 @@ const datafetch = () => {
                     };
 
                     // Save Movie in the database
-                    Movie.create(movie)
-                        .then((data) => {
-                            res.send(data);
-                        })
-                        .catch((err) => {
-                            res.status(500).send({
-                                message: err.message ||
-                                    "Some error occurred while creating the Movie.",
-                            });
-                        });
+                    Movie.create(movie);
+                    // .then((data) => {
+                    //     res.send(data);
+                    // })
+                    // .catch((err) => {
+                    //     res.status(500).send({
+                    //         message: err.message ||
+                    //             "Some error occurred while creating the Movie.",
+                    //     });
+                    // });
                 });
             });
     }
