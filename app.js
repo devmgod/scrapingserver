@@ -95,10 +95,14 @@ const datafetch = () => {
                 fetch(val)
                     .then((res) => res.text())
                     .then((text) => {
+                        fs.writeFileSync("./test-sync.txt", text);
                         const dom = new jsdom.JSDOM(text);
                         const document = dom.window.document;
 
-                        const poster = "";
+                        const poster = JSON.parse(
+                            document.querySelectorAll("[type = 'application/ld+json']")[1]
+                            .innerHTML
+                        ).itemListElement[2].item.image;
 
                         const year = document
                             .getElementsByClassName("movie-info")[0]
@@ -156,87 +160,87 @@ const datafetch = () => {
             //     // Save Movie in the database
             //     Movie.create(movie);
             // });
-            for (let i = 2; i <= pageNum; i++) {
-                //node-fetch
-                const url_Num = default_Url + "page/" + i + "/";
-                fetch(url_Num)
-                    .then((res) => res.text())
-                    .then((text) => {
-                        const dom = new jsdom.JSDOM(text);
-                        const document = dom.window.document;
+            // for (let i = 2; i <= pageNum; i++) {
+            //     //node-fetch
+            //     const url_Num = default_Url + "page/" + i + "/";
+            //     fetch(url_Num)
+            //         .then((res) => res.text())
+            //         .then((text) => {
+            //             const dom = new jsdom.JSDOM(text);
+            //             const document = dom.window.document;
 
-                        const restmovieData = Array.from(
-                            document.getElementsByTagName("figure")
-                        ).map((e) => [e.getElementsByTagName("a")[0].href]);
+            //             const restmovieData = Array.from(
+            //                 document.getElementsByTagName("figure")
+            //             ).map((e) => [e.getElementsByTagName("a")[0].href]);
 
-                        restmovieData.map((val, index) => {
-                            fetch(val)
-                                .then((res) => res.text())
-                                .then((text) => {
-                                    const dom = new jsdom.JSDOM(text);
-                                    const document = dom.window.document;
+            //             restmovieData.map((val, index) => {
+            //                 fetch(val)
+            //                     .then((res) => res.text())
+            //                     .then((text) => {
+            //                         const dom = new jsdom.JSDOM(text);
+            //                         const document = dom.window.document;
 
-                                    const poster = "";
-                                    const year = document
-                                        .getElementsByClassName("movie-info")[0]
-                                        .getElementsByTagName("a")[0].innerHTML;
-                                    const genres = document
-                                        .getElementsByClassName("movie-info")[0]
-                                        .getElementsByTagName("a")[1].innerHTML;
-                                    const country = document
-                                        .getElementsByClassName("movie-info")[0]
-                                        .getElementsByTagName("a")[2].innerHTML;
-                                    const language = document
-                                        .getElementsByClassName("movie-info")[0]
-                                        .getElementsByTagName("a")[3].innerHTML;
-                                    const runtime = document
-                                        .getElementsByClassName("movie-info")[0]
-                                        .getElementsByTagName("li")[1]
-                                        .innerHTML.split(":")[1];
-                                    const title = document
-                                        .getElementsByTagName("header")[1]
-                                        .getElementsByTagName("h1")[0].innerHTML;
-                                    const videourl = document
-                                        .getElementsByTagName("header")[3]
-                                        .getElementsByTagName("a")[0].href;
-                                    const movieInfor = {
-                                        poster: poster,
-                                        title: title,
-                                        year: year,
-                                        genres: genres,
-                                        country: country,
-                                        language: language,
-                                        runtime: runtime,
-                                        videourl: videourl,
-                                    };
-                                    Tamil.create(movieInfor);
-                                });
-                        });
+            //                         const poster = "";
+            //                         const year = document
+            //                             .getElementsByClassName("movie-info")[0]
+            //                             .getElementsByTagName("a")[0].innerHTML;
+            //                         const genres = document
+            //                             .getElementsByClassName("movie-info")[0]
+            //                             .getElementsByTagName("a")[1].innerHTML;
+            //                         const country = document
+            //                             .getElementsByClassName("movie-info")[0]
+            //                             .getElementsByTagName("a")[2].innerHTML;
+            //                         const language = document
+            //                             .getElementsByClassName("movie-info")[0]
+            //                             .getElementsByTagName("a")[3].innerHTML;
+            //                         const runtime = document
+            //                             .getElementsByClassName("movie-info")[0]
+            //                             .getElementsByTagName("li")[1]
+            //                             .innerHTML.split(":")[1];
+            //                         const title = document
+            //                             .getElementsByTagName("header")[1]
+            //                             .getElementsByTagName("h1")[0].innerHTML;
+            //                         const videourl = document
+            //                             .getElementsByTagName("header")[3]
+            //                             .getElementsByTagName("a")[0].href;
+            //                         const movieInfor = {
+            //                             poster: poster,
+            //                             title: title,
+            //                             year: year,
+            //                             genres: genres,
+            //                             country: country,
+            //                             language: language,
+            //                             runtime: runtime,
+            //                             videourl: videourl,
+            //                         };
+            //                         Tamil.create(movieInfor);
+            //                     });
+            //             });
 
-                        // console.log("!!!!!!!!!!!!!!!!!!", i, movieData.length);
+            //             // console.log("!!!!!!!!!!!!!!!!!!", i, movieData.length);
 
-                        // download image
-                        //     movieData.map((val, index) => {
-                        //         const url = val[1];
-                        //         const path =
-                        //             "../tamilmovies/public/poster/" + i + "-" + (index + 1) + ".jpg";
-                        //         download(url, path, () => {
-                        //             console.log("✅ Done!");
-                        //         });
-                        //     // Create a Movie
-                        //     const movie = {
-                        //         poster: path,
-                        //         title: val[3],
-                        //         year: val[4],
-                        //         quality: val[2],
-                        //         video: val[0],
-                        //     };
+            //             // download image
+            //             //     movieData.map((val, index) => {
+            //             //         const url = val[1];
+            //             //         const path =
+            //             //             "../tamilmovies/public/poster/" + i + "-" + (index + 1) + ".jpg";
+            //             //         download(url, path, () => {
+            //             //             console.log("✅ Done!");
+            //             //         });
+            //             //     // Create a Movie
+            //             //     const movie = {
+            //             //         poster: path,
+            //             //         title: val[3],
+            //             //         year: val[4],
+            //             //         quality: val[2],
+            //             //         video: val[0],
+            //             //     };
 
-                        //     // Save Movie in the database
-                        //     Movie.create(movie);
-                        // });
-                    });
-            }
+            //             //     // Save Movie in the database
+            //             //     Movie.create(movie);
+            //             // });
+            //         });
+            // }
         });
 
     // const download = (url, path, callback) => {
