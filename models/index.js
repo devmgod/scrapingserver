@@ -19,6 +19,13 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.movies = require("./movie.model.js")(sequelize, Sequelize);
+// db.movies = require("./movie.model.js")(sequelize, Sequelize);
+db.tamils = require("./tamil.model.js")(sequelize, Sequelize);
+db.featureds = require("./featured.model.js")(sequelize, Sequelize);
+db.hindies = require("./hindi.model.js")(sequelize, Sequelize);
+db.kannadas = require("./kannada.model.js")(sequelize, Sequelize);
+db.malayalams = require("./malayalam.model.js")(sequelize, Sequelize);
+db.telugues = require("./telugu.model.js")(sequelize, Sequelize);
+db.upcomings = require("./upcoming.model.js")(sequelize, Sequelize);
 
 module.exports = db;

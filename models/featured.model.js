@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Movie = sequelize.define("movie", {
+    const Featured = sequelize.define("featured", {
         poster: {
             type: Sequelize.STRING,
         },
@@ -11,14 +11,20 @@ module.exports = (sequelize, Sequelize) => {
         year: {
             type: Sequelize.STRING,
         },
-        quality: {
+        runtime: {
             type: Sequelize.STRING,
         },
 
-        video: {
+        genres: {
+            type: Sequelize.STRING,
+        },
+        country: {
+            type: Sequelize.STRING,
+        },
+        language: {
             type: Sequelize.STRING,
         },
     });
 
-    return Movie;
+    return Featured;
 };
