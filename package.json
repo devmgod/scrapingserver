@@ -3,7 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
-        "start": "node ./bin/www"
+        "start": "nodemon ./bin/www"
     },
     "dependencies": {
         "body-parser": "^1.20.0",
@@ -19,6 +19,7 @@
         "mysql": "^2.18.1",
         "mysql2": "^2.3.3",
         "node-fetch": "^2.6.7",
+        "nodemon": "^2.0.19",
         "request": "^2.88.2",
         "sequelize": "^6.21.3"
     }

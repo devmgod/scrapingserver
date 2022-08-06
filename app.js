@@ -50,13 +50,14 @@ const datafetch = () => {
     const Malayalam = db_table.malayalams;
     const Telugu = db_table.telugues;
     const Upcoming = db_table.upcomings;
+
     const default_Url = "https://www.tamilrockermovies.us/language/tamil/";
 
-    //database format
-    // Movie.destroy({
-    //     where: {},
-    //     truncate: false,
-    // });
+    // database format
+    Tamil.destroy({
+        where: {},
+        truncate: false,
+    });
 
     //directory format
     // const directory = "../tamilmovies/poster/";
@@ -82,7 +83,6 @@ const datafetch = () => {
                     // e.getElementsByTagName("div")[0].style.backgroundImage,
                 ]
             );
-
             //page number
             const allPage = document
                 .getElementsByTagName("nav")[2]
@@ -98,9 +98,8 @@ const datafetch = () => {
                         const dom = new jsdom.JSDOM(text);
                         const document = dom.window.document;
 
-                        const poster = document
-                            .getElementsByTagName("figure")[0]
-                            .getElementsByTagName("div")[0].style.backgroundImage;
+                        const poster = "";
+
                         const year = document
                             .getElementsByClassName("movie-info")[0]
                             .getElementsByTagName("a")[0].innerHTML;
@@ -120,10 +119,10 @@ const datafetch = () => {
                         const title = document
                             .getElementsByTagName("header")[1]
                             .getElementsByTagName("h1")[0].innerHTML;
-                        const videoUrl = document
+                        const videourl = document
                             .getElementsByTagName("header")[3]
                             .getElementsByTagName("a")[0].href;
-                        // console.log("................", runtime);
+                        console.log("................", poster);
                         const movieInfor = {
                             poster: poster,
                             title: title,
@@ -132,7 +131,7 @@ const datafetch = () => {
                             country: country,
                             language: language,
                             runtime: runtime,
-                            videoUrl: videoUrl,
+                            videourl: videourl,
                         };
                         Tamil.create(movieInfor);
                     });
@@ -177,9 +176,7 @@ const datafetch = () => {
                                     const dom = new jsdom.JSDOM(text);
                                     const document = dom.window.document;
 
-                                    const poster = document
-                                        .getElementsByTagName("figure")[0]
-                                        .getElementsByTagName("div")[0].style.backgroundImage;
+                                    const poster = "";
                                     const year = document
                                         .getElementsByClassName("movie-info")[0]
                                         .getElementsByTagName("a")[0].innerHTML;
@@ -199,7 +196,7 @@ const datafetch = () => {
                                     const title = document
                                         .getElementsByTagName("header")[1]
                                         .getElementsByTagName("h1")[0].innerHTML;
-                                    const videoUrl = document
+                                    const videourl = document
                                         .getElementsByTagName("header")[3]
                                         .getElementsByTagName("a")[0].href;
                                     const movieInfor = {
@@ -210,7 +207,7 @@ const datafetch = () => {
                                         country: country,
                                         language: language,
                                         runtime: runtime,
-                                        videoUrl: videoUrl,
+                                        videourl: videourl,
                                     };
                                     Tamil.create(movieInfor);
                                 });

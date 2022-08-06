@@ -24,6 +24,9 @@ module.exports = (sequelize, Sequelize) => {
         language: {
             type: Sequelize.STRING,
         },
+        videourl: {
+            type: Sequelize.STRING,
+        },
     });
 
     return Featured;
