@@ -65,28 +65,45 @@ const datafetch = () => {
         }
     });
 
-    Tamil.destroy({
-        where: {},
-        truncate: false,
-    });
+    // Featured.destroy({
+    //     where: {},
+    //     truncate: false,
+    // });
+    // Kannada.destroy({
+    //     where: {},
+    //     truncate: false,
+    // });
+    // Upcoming.destroy({
+    //     where: {},
+    //     truncate: false,
+    // });
+    // Malayalam.destroy({
+    //     where: {},
+    //     truncate: false,
+    // });
+    // Hindi.destroy({
+    //     where: {},
+    //     truncate: false,
+    // });
 
-    const videolink = [
-        "https://www.tamilrockermovies.us/language/tamil/",
-        "https://www.tamilrockermovies.us/featured/",
-        "https://www.tamilrockermovies.us/upcoming/",
-        "https://www.tamilrockermovies.us/language/kannada/",
-        "https://www.tamilrockermovies.us/language/malayalam/",
-        "https://www.tamilrockermovies.us/language/telugu/",
-    ];
+    const videolink = {
+        "https://www.tamilrockermovies.us/language/tamil/": "Tamil",
+        "https://www.tamilrockermovies.us/featured/": "Featured",
+        "https://www.tamilrockermovies.us/upcoming/": "Upcoming",
+        "https://www.tamilrockermovies.us/language/kannada/": "Kannada",
+        "https://www.tamilrockermovies.us/language/malayalam/": "Malayalam",
+        "https://www.tamilrockermovies.us/language/telugu/": "Telugu",
+    };
 
-    videolink.map((val) => {
+    Object.keys(videolink).map((key) => {
         //Scraping
-        fetch(val)
+        fetch(key)
             .then((res) => res.text())
             .then((text) => {
                 const dom = new jsdom.JSDOM(text);
                 const document = dom.window.document;
 
+                //scrap function
                 scrapingContent(document);
 
                 //page number
@@ -98,18 +115,19 @@ const datafetch = () => {
 
                 for (let i = 2; i <= pageNum; i++) {
                     //node-fetch
-                    const url_Num = val + "page/" + i + "/";
+                    const url_Num = key + "page/" + i + "/";
                     fetch(url_Num)
                         .then((res) => res.text())
                         .then((text) => {
                             const dom = new jsdom.JSDOM(text);
                             const document = dom.window.document;
 
+                            //scrap function
                             scrapingContent(document);
                         });
                 }
             });
-        const scrapingContent = (document, imgtitle) => {
+        const scrapingContent = (document) => {
             const movieData = Array.from(document.getElementsByTagName("figure")).map(
                 (e) => [
                     e.getElementsByTagName("a")[0].href,
@@ -129,8 +147,6 @@ const datafetch = () => {
                             document.querySelectorAll("[type = 'application/ld+json']")[1]
                             .innerHTML
                         ).itemListElement[2].item.image;
-
-                        console.log("test", poster);
                         const year = document
                             .getElementsByClassName("movie-info")[0]
                             .getElementsByTagName("a")[0].innerHTML;
@@ -175,7 +191,51 @@ const datafetch = () => {
                             videourl: videourl,
                         };
 
-                        Tamil.create(movieInfor);
+                        switch (videolink[key]) {
+                            case "Tamil":
+                                Tamil.destroy({
+                                    where: {},
+                                    truncate: false,
+                                });
+                                Tamil.create(movieInfor);
+                                break;
+                            case "Featured":
+                                Featured.destroy({
+                                    where: {},
+                                    truncate: false,
+                                });
+                                Featured.create(movieInfor);
+                                break;
+                            case "Upcoming":
+                                Upcoming.destroy({
+                                    where: {},
+                                    truncate: false,
+                                });
+                                Upcoming.create(movieInfor);
+                                break;
+                            case "Kannada":
+                                Kannada.destroy({
+                                    where: {},
+                                    truncate: false,
+                                });
+                                Kannada.create(movieInfor);
+                                break;
+                            case "Telugu":
+                                Telugu.destroy({
+                                    where: {},
+                                    truncate: false,
+                                });
+                                Telugu.create(movieInfor);
+                                break;
+                            case "Malayalam":
+                                Malayalam.destroy({
+                                    where: {},
+                                    truncate: false,
+                                });
+                                Malayalam.create(movieInfor);
+                                break;
+                            default:
+                        }
                     });
             });
         };
