@@ -1,21 +1,24 @@
 module.exports = {
-    HOST: "127.0.0.1",
+  HOST: "127.0.0.1",
 
-    USER: "root",
+  USER: "root",
 
-    PASSWORD: "",
+  PASSWORD: "",
 
-    DB: "scraping",
+  DB: "scraping",
 
-    dialect: "mysql",
+  dialect: "mysql",
 
-    pool: {
-        max: 11,
+  pool: {
+    max: 11,
 
-        min: 0,
+    min: 0,
 
-        acquire: 60000,
+    acquire: 60000,
 
-        idle: 10000,
-    },
+    idle: 10000,
+  },
+  dialectOptions: {
+    connectTimeout: 60000,
+  },
 };
