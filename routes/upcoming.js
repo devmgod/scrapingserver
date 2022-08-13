@@ -1,11 +1,12 @@
+const { upcomings } = require("../models");
 var express = require("express");
-const { tamils, hindies, malayalams, featureds, kannadas, telugues, upcomings } = require("../models");
 var router = express.Router();
 
 const db = require("../models"); // models path depend on your structure
 const Movie = db.movies;
 var Sequelize = require("sequelize");
 const Op = Sequelize.Op;
+
 
 
 // Retrieve all Movies
@@ -18,11 +19,11 @@ router.get("/", (req, res) => {
         } :
         null;
 
-    tamils
+    upcomings
         .findAll({
             where: {
                 iframurl: {
-                    [Op.not]: null,
+                    [Op.ne]: null,
                 },
             },
         })

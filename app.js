@@ -14,6 +14,12 @@ const axios = require("axios");
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var tamil = require("./routes/tamil");
+var hindi = require("./routes/hindi");
+var kannada = require("./routes/kannada");
+var malayalam = require("./routes/malayalam");
+var telugu = require("./routes/telugu");
+var upcoming = require("./routes/upcoming");
+var featured = require("./routes/featured");
 
 var app = express();
 
@@ -35,7 +41,14 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/tamil", tamil);
+app.use("/tamil/", tamil);
+app.use("/hindi/", hindi);
+app.use("/kannada/", kannada);
+app.use("/malayalam/", malayalam);
+app.use("/telugu/", telugu);
+app.use("/upcoming/", upcoming);
+app.use("/featured/", featured);
+
 
 //mysql create
 const db = require("./models");
@@ -66,16 +79,23 @@ const videolink = {
 };
 const directory = "../tamilmovies/public/poster/";
 
-const datafetch = async() => {
+// setInterval(() => { main() }, 3600000);
+
+const main = async() => {
     // directory format
 
     Object.keys(videolink).forEach(async(key) => {
         //Scraping
-        await scraping(key);
+
+        await dbMap(key);
+        // await clearDood();
+        // await scrapingmain(key);
+
+
     });
 };
 
-const scraping = async(key) => {
+const scrapingmain = async(key) => {
     try {
 
         const document = await fetchFun(key);
@@ -115,6 +135,7 @@ const scrapingContent = async(document, key) => {
     const downloadUrls = new Set(); //unique value array
     //sub data fetch
 
+
     movieData.map(async(e, index) => {
         const document = await fetchFun(e)
 
@@ -151,12 +172,13 @@ const scrapingContent = async(document, key) => {
                 .getElementsByTagName("header")[3]
                 .getElementsByTagName("a")[0].href;
 
+
             //create db
             const myDb = videolink[key];
             const tbData = await myDb.findAll({ where: null });
             const titles = tbData.map((e) => e.title);
-            if (titles.includes(title.trim())) {
 
+            if (titles.includes(title.trim())) {
                 return;
             } else {
 
@@ -166,8 +188,7 @@ const scrapingContent = async(document, key) => {
                 const imgName = iName[iName.length - 1];
 
                 const path = directory + imgName;
-                console.log(index, 'wwwwwwwwwwwwwwwww', path)
-                    // const files = fs.readdirSync(directory);
+                // const files = fs.readdirSync(directory);
                 await new Promise((resolve) => {
                     if (downloadUrls.has(url)) {
                         resolve();
@@ -211,86 +232,125 @@ const fetchFun = async(key) => {
     return document;
 }
 
+const dbMap = async(e) => {
+    const tbData = await videolink[e].findAll({ where: null });
+    tbData.map(async(val, index) => {
+        try {
+            console.log('lleeeeeeeeeeeeeeeeeeeee', val.poster)
+            const tbData = await videolink[e].findAll({ where: null });
+            const iframes = tbData.map((e) => e.iframurl);
+            // if (iframes.includes(val.iframurl)) {
+            //     videolink[e].destroy({
+            //         where: { val: id },
+            //       })
+            //     return;
+            // } 
+            // updataIframe(e, val);
+            // file_code(e, val)
+
+        } catch (e) {
+
+        }
+    });
+
+}
+
+const updataIframe = (e, val) => {
+
+    // console.log('===================', val.filecode)
+    //iframe
+    axios
+        .get(
+            "https://doodapi.com/api/file/list?key=131197ck2gd3ei6kkw08j0&page=1&per_page=10000"
+        )
+        .then((res) => {
+            res.data.result.files.map((list) => {
+                if (val.filecode == list.file_code) {
+                    console.log(
+                        index,
+                        `----------------------------`,
+                        list.file_code,
+                        list.download_url,
+                        val.title,
+                        val.videourl
+                    );
+                    // update file_code
+                    const movieInfor = {
+                        iframurl: list.download_url,
+                    };
+                    videolink[e].update(movieInfor, {
+                        where: { filecode: list.file_code },
+                    });
+                }
+            });
+        })
+        .catch((error) => {
+            //   console.error(error);
+        });
+
+}
+
+
+const file_code = (e, val) => {
+    //file_code
+    axios
+        .get(
+            "https://doodapi.com/api/urlupload/slots?key=131197ck2gd3ei6kkw08j0"
+        )
+        .then((res) => {
+            if (res.data.used_slots < 100) {
+                axios
+                    .get(
+                        "https://doodapi.com/api/upload/url?key=131197ck2gd3ei6kkw08j0&url=" +
+                        val.videourl +
+                        "&new_title=" +
+                        val.title
+                    )
+                    .then((res) => {
+                        console.log(`statusCode: ${res.status}`);
+
+                        //update file_code
+                        const movieInfor = {
+                            filecode: res.data.file_code,
+                        };
+                        videolink[e].update(movieInfor, {
+                            where: { title: val.title },
+                        });
+                    })
+                    .catch((error) => {
+                        // console.error(error);
+                    });
+            } else if (res.data.used_slots >= 100) {
+                return;
+            }
+        })
+        .catch((error) => {
+            // console.error(error);
+        });
+}
+
+const clearDood = () => {
+    //clear doodstream
+    axios
+        .get(
+            "https://doodapi.com/api/urlupload/actions?key=131197ck2gd3ei6kkw08j0&clear_errors=yes"
+        )
+        .then((res) => {
+            console.log(`statusCode: ${res.data.msg}`);
+        })
+        .catch((error) => {
+            //   console.error(error);
+        });
+
+}
+
 const doodApi = () => {
     Object.keys(videolink).forEach(async(dbSpecific) => {
-        const tbData = await videolink[dbSpecific].findAll({ where: null });
-        tbData.map((val, index) => {
-            // console.log(val.title);
-            axios
-                .get(
-                    "https://doodapi.com/api/file/list?key=131197ck2gd3ei6kkw08j0&page=1&per_page=10000"
-                )
-                .then((res) => {
-                    res.data.result.files.map((list) => {
-                        if (val.filecode == list.file_code) {
-                            console.log(
-                                index,
-                                `----------------------------`,
-                                list.file_code,
-                                list.download_url,
-                                val.title,
-                                val.videourl
-                            );
-                            // update file_code
-                            const movieInfor = {
-                                iframurl: list.download_url,
-                            };
-                            videolink[dbSpecific].update(movieInfor, {
-                                where: { filecode: list.file_code },
-                            });
-                        }
-                    });
-                })
-                .catch((error) => {
-                    //   console.error(error);
-                });
 
-            // axios
-            //     .get(
-            //         "https://doodapi.com/api/urlupload/actions?key=131197ck2gd3ei6kkw08j0&clear_errors=yes"
-            //     )
-            //     .then((res) => {
-            //         console.log(`statusCode: ${res.data.msg}`);
-            //     })
-            //     .catch((error) => {
-            //         //   console.error(error);
-            //     });
-            // axios
-            //     .get(
-            //         "https://doodapi.com/api/urlupload/slots?key=131197ck2gd3ei6kkw08j0"
-            //     )
-            //     .then((res) => {
-            //         if (res.data.used_slots < 100) {
-            //             axios
-            //                 .get(
-            //                     "https://doodapi.com/api/upload/url?key=131197ck2gd3ei6kkw08j0&url=" +
-            //                     val.videourl +
-            //                     "&new_title=" +
-            //                     val.title
-            //                 )
-            //                 .then((res) => {
-            //                     console.log(`statusCode: ${res.status}`);
 
-            //                     //update file_code
-            //                     const movieInfor = {
-            //                         filecode: res.data.file_code,
-            //                     };
-            //                     videolink[dbSpecific].update(movieInfor, {
-            //                         where: { title: val.title },
-            //                     });
-            //                 })
-            //                 .catch((error) => {
-            //                     console.error(error);
-            //                 });
-            //         } else if (res.data.used_slots >= 100) {
-            //             return;
-            //         }
-            //     })
-            //     .catch((error) => {
-            //         console.error(error);
-            //     });
-        });
+
     });
+
 };
 
 const db_dir_format = () => {
@@ -312,9 +372,8 @@ const db_dir_format = () => {
     // });
 }
 
-// doodApi();
 
-datafetch();
+main();
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
