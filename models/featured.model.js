@@ -33,6 +33,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         iframurl: {
             type: Sequelize.STRING,
+            unique: true
         },
     });
 

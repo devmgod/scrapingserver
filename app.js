@@ -79,7 +79,7 @@ const videolink = {
 };
 const directory = "../tamilmovies/public/poster/";
 
-// setInterval(() => { main() }, 3600000);
+setInterval(() => { main() }, 86400000);
 
 const main = async() => {
     // directory format
@@ -88,11 +88,11 @@ const main = async() => {
         //Scraping
 
         await dbMap(key);
-        // await clearDood();
-        // await scrapingmain(key);
+        await scrapingmain(key);
 
 
     });
+    await clearDood();
 };
 
 const scrapingmain = async(key) => {
@@ -236,17 +236,17 @@ const dbMap = async(e) => {
     const tbData = await videolink[e].findAll({ where: null });
     tbData.map(async(val, index) => {
         try {
-            console.log('lleeeeeeeeeeeeeeeeeeeee', val.poster)
-            const tbData = await videolink[e].findAll({ where: null });
-            const iframes = tbData.map((e) => e.iframurl);
-            // if (iframes.includes(val.iframurl)) {
+            // console.log('lleeeeeeeeeeeeeeeeeeeee', val.poster)
+            // const tbData = await videolink[e].findAll({ where: null });
+            // const posters = tbData.map((e) => e.poster);
+            // if (posters.includes(val.poster)) {
             //     videolink[e].destroy({
             //         where: { val: id },
             //       })
             //     return;
             // } 
-            // updataIframe(e, val);
-            // file_code(e, val)
+            updataIframe(e, val);
+            file_code(e, val)
 
         } catch (e) {
 
@@ -372,8 +372,6 @@ const db_dir_format = () => {
     // });
 }
 
-
-main();
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
