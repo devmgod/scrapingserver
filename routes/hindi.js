@@ -1,5 +1,5 @@
+const { hindies } = require("../models");
 var express = require("express");
-const { tamils, hindies, malayalams, featureds, kannadas, telugues, upcomings } = require("../models");
 var router = express.Router();
 
 const db = require("../models"); // models path depend on your structure
@@ -18,11 +18,11 @@ router.get("/", (req, res) => {
         } :
         null;
 
-    tamils
+    hindies
         .findAll({
             where: {
                 iframurl: {
-                    [Op.not]: null,
+                    [Op.ne]: null,
                 },
             },
         })

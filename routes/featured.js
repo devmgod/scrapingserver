@@ -8,6 +8,7 @@ var Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 
+
 // Retrieve all Movies
 router.get("/", (req, res) => {
     const title = req.query.title;
@@ -18,11 +19,11 @@ router.get("/", (req, res) => {
         } :
         null;
 
-    tamils
+    featureds
         .findAll({
             where: {
                 iframurl: {
-                    [Op.not]: null,
+                    [Op.ne]: null,
                 },
             },
         })

@@ -21,6 +21,7 @@
         "mysql": "^2.18.1",
         "mysql2": "^2.3.3",
         "node-fetch": "^2.6.7",
+        "node-find-files": "^1.0.0",
         "nodemon": "^2.0.19",
         "request": "^2.88.2",
         "sequelize": "^6.21.3"

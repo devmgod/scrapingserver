@@ -18,11 +18,11 @@ router.get("/", (req, res) => {
         } :
         null;
 
-    tamils
+    malayalams
         .findAll({
             where: {
                 iframurl: {
-                    [Op.not]: null,
+                    [Op.ne]: null,
                 },
             },
         })

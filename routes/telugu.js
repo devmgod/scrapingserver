@@ -1,3 +1,31 @@
+// module.exports = (app) => {
+
+//     const movies = require("../controllers/movie.controller.js");
+
+//     var router = require("express").Router();
+
+//     // Create a new Movie
+//     router.post("/", movies.create);
+
+//     // Retrieve all Movies
+//     router.get("/", movies.findAll);
+
+//     // Retrieve a single Movie with id
+//     router.get("/:id", movies.findOne);
+
+//     // Update a Movie with id
+//     router.put("/:id", movies.update);
+
+//     // Delete a Movie with id
+//     router.delete("/:id", movies.delete);
+
+//     // Create a new Movie
+//     router.delete("/", movies.deleteAll);
+
+//     app.use("/api/movie", router);
+// };
+// const movies = require("../controllers/movie.controller.js");
+
 var express = require("express");
 const { tamils, hindies, malayalams, featureds, kannadas, telugues, upcomings } = require("../models");
 var router = express.Router();
@@ -7,6 +35,37 @@ const Movie = db.movies;
 var Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
+// Create a new Movie
+router.post("/", (req, res) => {
+    // Validate request
+    console.log("----------------------", req.body);
+    if (!req.body.poster) {
+        res.status(400).send({
+            message: "Content can not be empty!",
+        });
+        return;
+    }
+
+    // Create a Movie
+    const movie = {
+        poster: req.body.poster,
+        title: req.body.title,
+        year: req.body.year,
+        quality: req.body.quality,
+        video: req.body.video,
+    };
+
+    // Save Movie in the database
+    Movie.create(movie)
+        .then((data) => {
+            res.send(data);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: err.message || "Some error occurred while creating the Movie.",
+            });
+        });
+});
 
 // Retrieve all Movies
 router.get("/", (req, res) => {
@@ -18,11 +77,11 @@ router.get("/", (req, res) => {
         } :
         null;
 
-    tamils
+    telugues
         .findAll({
             where: {
                 iframurl: {
-                    [Op.not]: null,
+                    [Op.ne]: null,
                 },
             },
         })
