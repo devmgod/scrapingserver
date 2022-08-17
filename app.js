@@ -79,7 +79,6 @@ const videolink = {
 };
 const directory = "../tamilmovies/public/poster/";
 
-setInterval(() => { main() }, 86400000);
 
 const main = async() => {
     // directory format
@@ -343,6 +342,10 @@ const clearDood = () => {
         });
 
 }
+
+
+// setInterval(() => { main() }, 86400000);
+main();
 
 const doodApi = () => {
     Object.keys(videolink).forEach(async(dbSpecific) => {
